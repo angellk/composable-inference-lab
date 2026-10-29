@@ -2,6 +2,8 @@
 
 Status key: **VERIFIED** = actually run in this lab with real acceptance checks. **DOCUMENTED** = commands/config provided and sourced from upstream docs, not personally run here.
 
+The full core path (Gateway, Schedule, Serve, Observe) has been verified under both podman and Docker (via colima); see `docs/COMPATIBILITY.md` for the architecture and runtime compatibility matrix, including a documented workaround for the KServe arm64 blocker below.
+
 ## Gateway
 
 | Project | Status | Notes |
@@ -30,7 +32,7 @@ The four control loops (see `ARCHITECTURE.md`) should be proved **independently*
 | Project | Status | Notes |
 | :--- | :--- | :--- |
 | **llm-d-inference-sim** | VERIFIED | GPU-free, OpenAI-compatible simulator. Does not need KServe to run standalone. Has zero OTel tracing support (see `FINDINGS.md`); this is the gap that real vLLM would close. |
-| KServe + vLLM | ATTEMPTED, BLOCKED | Hard-blocked by `kserve/huggingfaceserver:v0.20.0` having no arm64 manifest, confirmed via image manifest inspection. An Apple Silicon architecture block, not a resource or tuning issue; would need an amd64 host to actually run. Use Standard/RawDeployment mode when you do, not the older Knative/Serverless path, which is pinned to specific version combinations and isn't general-purpose. KServe's newer `LLMInferenceService` is a distinct, llm-d-integrated API; don't mix it with plain `InferenceService` examples. CPU-only runs need extra vLLM flags (`--gpu-memory-utilization`, `--max-model-len`). |
+| KServe + vLLM | ATTEMPTED, BLOCKED | Hard-blocked by `kserve/huggingfaceserver:v0.20.0` having no arm64 manifest, confirmed via image manifest inspection. An Apple Silicon architecture block, not a resource or tuning issue; would need an amd64 host to actually run, or see the vLLM-direct workaround in `docs/COMPATIBILITY.md` (the upstream `vllm/vllm-openai` image itself is multi-arch; it's specifically KServe's own wrapper image that isn't). Use Standard/RawDeployment mode when you do, not the older Knative/Serverless path, which is pinned to specific version combinations and isn't general-purpose. KServe's newer `LLMInferenceService` is a distinct, llm-d-integrated API; don't mix it with plain `InferenceService` examples. CPU-only runs need extra vLLM flags (`--gpu-memory-utilization`, `--max-model-len`). |
 | Ray Serve | DOCUMENTED | Reachable via the KubeRay install if you want one additional serving-abstraction data point. |
 | SGLang, Triton | NOT ATTEMPTED | Better represented from their own docs/benchmarks than a rushed local install; this lab deliberately doesn't try to be a serving-engine benchmark. |
 

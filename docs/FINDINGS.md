@@ -47,3 +47,15 @@ Still not attempted:
 - nono, Agent Substrate (blocked by the Docker-CLI coupling in finding 8 above, not attempted further)
 
 See `docs/ALTERNATIVES.md` for the full per-layer status.
+
+## Docker verification pass (third pass)
+
+The core path (Gateway, Schedule, Serve, Observe) was re-verified end to end under Docker (via colima, a CLI-only Docker-compatible runtime) on a separate `kind` cluster, confirming it isn't podman-specific. Same acceptance tests, same real results: `Gateway` `Programmed=True`, `InferencePool` `Accepted`/`ResolvedRefs=True`, a real HTTP 200 through the full path, and a 10-span trace in Jaeger with identical structure (same operation names, same parent/child nesting) to the podman run.
+
+Two genuine bugs in this lab's own checked-in setup surfaced along the way, independent of podman vs. Docker:
+
+9. **`manifests/schedule/kueue-setup.yaml` used the `kueue.x-k8s.io/v1beta1` API version, which Kueue v0.20.0 no longer serves** (the CRD lists `v1beta1` with `served: false`; only `v1beta2` is actually usable). This means the manifest as checked into this repo would fail for anyone cloning it fresh today, independent of which runtime they use. Fixed in place to `v1beta2`.
+
+10. **llm-d's own router chart (`base.values.yaml`) defaults `router.epp.resources` and `router.proxy.resources` to 4 CPU / 8Gi each**, a production-sized default that needs an 8+ CPU / 16+ GB node just to schedule the router pod. This isn't something either runtime caused; it's the upstream chart's own default, sized for real deployments rather than a laptop-scale lab. `scripts/04-serve.sh` now overrides these down to 250m CPU / 256Mi for the EPP and 100m CPU / 128Mi for the sidecar proxy; without that override, the EPP pod sits `Pending` indefinitely on a typical lab-sized node.
+
+11. **Both podman machine and colima showed a gap between requested and actually-usable disk size.** Podman's version of this (resizing the virtual disk file without growing the guest partition) is documented above. Colima, configured with `--disk 40`, showed `df -h /` inside the VM reporting only ~19G total; the underlying cause wasn't investigated further here, but the symptom (configured size does not equal usable size) is the same pattern on a second, independent VM-based runtime.
