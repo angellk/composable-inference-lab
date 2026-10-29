@@ -20,4 +20,4 @@ Neither tool is wired into this repo's scripts or Makefile. If you add one:
 
 1. Point it at the real serving endpoint (KServe/vLLM `InferenceService`, not the simulator, since the simulator has no real model behavior to evaluate).
 2. Keep evaluation traffic separate from the load-testing traffic in [`WORKLOADS.md`](WORKLOADS.md): one measures quality/cost/latency against a judged standard, the other measures raw throughput/latency under load. Mixing the two muddies both results.
-3. Document which tool you used and why in a PR, the same way [`GOTCHAS.md`](GOTCHAS.md) documents verified findings: "it's recommended in a doc" is not the same as "it was run and the results are known."
+3. Document which tool you used and why in a PR, the same way [`FINDINGS.md`](FINDINGS.md) documents verified findings: "it's recommended in a doc" is not the same as "it was run and the results are known."

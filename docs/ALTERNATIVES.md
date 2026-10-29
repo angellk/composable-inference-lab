@@ -29,7 +29,7 @@ The four control loops (see `ARCHITECTURE.md`) should be proved **independently*
 
 | Project | Status | Notes |
 | :--- | :--- | :--- |
-| **llm-d-inference-sim** | VERIFIED | GPU-free, OpenAI-compatible simulator. Does not need KServe to run standalone. Has zero OTel tracing support (see `GOTCHAS.md`); this is the gap that real vLLM would close. |
+| **llm-d-inference-sim** | VERIFIED | GPU-free, OpenAI-compatible simulator. Does not need KServe to run standalone. Has zero OTel tracing support (see `FINDINGS.md`); this is the gap that real vLLM would close. |
 | KServe + vLLM | DOCUMENTED | Use Standard/RawDeployment mode, not the older Knative/Serverless path. Serverless is pinned to specific version combinations and isn't a general-purpose current path. KServe's newer `LLMInferenceService` is a distinct, llm-d-integrated API; don't mix it with plain `InferenceService` examples. CPU-only runs need extra vLLM flags (`--gpu-memory-utilization`, `--max-model-len`). |
 | Ray Serve | DOCUMENTED | Reachable via the KubeRay install if you want one additional serving-abstraction data point. |
 | SGLang, Triton | NOT ATTEMPTED | Better represented from their own docs/benchmarks than a rushed local install; this lab deliberately doesn't try to be a serving-engine benchmark. |

@@ -35,7 +35,7 @@ Control      Kubernetes primitives
 - `scripts/`: one script per layer, called by the `Makefile`. Idempotent where practical.
 - `manifests/`: the Kubernetes YAML each script applies, organized by layer.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): the stack model and the four-control-loop correction.
-- [docs/GOTCHAS.md](docs/GOTCHAS.md): verified findings, corrections to the "obvious" path, and one open issue (an EPP span reports `error=True` on a successful request; see that file for the suspected cause).
+- [docs/FINDINGS.md](docs/FINDINGS.md): verified findings, corrections to the "obvious" path, and one open issue (an EPP span reports `error=True` on a successful request; see that file for the suspected cause).
 - [docs/ALTERNATIVES.md](docs/ALTERNATIVES.md): per-layer alternate projects, each tagged VERIFIED or DOCUMENTED. Don't assume something marked DOCUMENTED works until you've run it.
 - [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md): what could go wrong running this lab, and how to avoid it.
 - [docs/EVALS.md](docs/EVALS.md): recommended (not integrated) tools for evaluating real model behavior once you swap in a real model.
@@ -43,7 +43,7 @@ Control      Kubernetes primitives
 
 ## Conventions for changes
 
-- Every claim in [docs/GOTCHAS.md](docs/GOTCHAS.md) should be something that was actually run and verified, not copied from upstream docs without checking. If you add a finding, say how you verified it.
+- Every claim in [docs/FINDINGS.md](docs/FINDINGS.md) should be something that was actually run and verified, not copied from upstream docs without checking. If you add a finding, say how you verified it.
 - [docs/ALTERNATIVES.md](docs/ALTERNATIVES.md) status tags (VERIFIED / DOCUMENTED / NEEDS GPU HARDWARE) are load-bearing; don't flip a DOCUMENTED entry to VERIFIED without actually running it.
 - Keep this repo vendor-neutral. Every project referenced here is upstream open source; don't add anything that implies endorsement of a specific commercial distribution.
 - No secrets, kubeconfigs, or cloud credentials should ever be committed; see [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) and `.gitignore`.

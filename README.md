@@ -30,7 +30,7 @@ This lab distinguishes what was **run and confirmed end-to-end** from what's **d
 | Gateway | agentgateway + Gateway API Inference Extension | Istio, Envoy AI Gateway, Praxis |
 | Schedule | Kueue (admission/quota loop) | Volcano, KAI Scheduler, HAMi (needs GPU hardware) |
 | Serve | llm-d-inference-sim (GPU-free simulator) | KServe + vLLM, Ray Serve, SGLang, Triton |
-| Observe | OTel trace correlation across gateway → EPP | Serve-layer span emission (structural gap, see [Gotchas](docs/GOTCHAS.md)) |
+| Observe | OTel trace correlation across gateway → EPP | Serve-layer span emission (structural gap, see [Gotchas](docs/FINDINGS.md)) |
 
 ## Prerequisites
 
@@ -55,7 +55,7 @@ make serve
 make observe
 ```
 
-See the `Makefile` and `scripts/` for what each target actually runs, and [`docs/GOTCHAS.md`](docs/GOTCHAS.md) for the gotchas you'll hit along the way. Most of them are already fixed in these scripts, but a few (like the EPP reporting an error status on an otherwise-successful request) are open and worth knowing about before you demo this.
+See the `Makefile` and `scripts/` for what each target actually runs, and [`docs/FINDINGS.md`](docs/FINDINGS.md) for the gotchas you'll hit along the way. Most of them are already fixed in these scripts, but a few (like the EPP reporting an error status on an otherwise-successful request) are open and worth knowing about before you demo this.
 
 ## Layout
 
@@ -70,7 +70,7 @@ See the `Makefile` and `scripts/` for what each target actually runs, and [`docs
 │   └── observe/          # Jaeger (used directly as the OTLP backend)
 └── docs/
     ├── ARCHITECTURE.md   # the composable stack model and the four-control-loop correction
-    ├── GOTCHAS.md        # verified gotchas, corrections, and open issues
+    ├── FINDINGS.md       # verified gotchas, corrections, and open issues
     └── ALTERNATIVES.md   # per-layer alternate projects, verified vs. documented-only
 ```
 

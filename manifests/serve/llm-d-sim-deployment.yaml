@@ -2,7 +2,7 @@
 # "Simulated Mode" with zero network/GPU dependencies. A real HuggingFace
 # model name (as in the project's own example manifest) triggers a
 # vllm-render tokenizer sidecar that needs real network/HF access.
-# See docs/GOTCHAS.md, finding #2.
+# See docs/FINDINGS.md, finding #2.
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -64,4 +64,4 @@ An `InferencePool` selects pods **by label, within its namespace**; it does not 
 
 The EPP boundary is the one most likely to break silently. Because the gateway talks to the EPP via a gRPC `ext_proc` callback rather than a normal HTTP hop, it's easy to end up with the EPP's span as an orphaned new root instead of a child of the incoming request. llm-d's own scheduler implementation deliberately delays starting its span until request headers (and therefore trace context) arrive, specifically to avoid this.
 
-Treat "telemetry reaches the collector" and "one request produces a connected trace across gateway → schedule → serve" as two separate, both-required acceptance criteria, not one. See [`GOTCHAS.md`](GOTCHAS.md) for what this lab could and couldn't prove on that front.
+Treat "telemetry reaches the collector" and "one request produces a connected trace across gateway → schedule → serve" as two separate, both-required acceptance criteria, not one. See [`FINDINGS.md`](FINDINGS.md) for what this lab could and couldn't prove on that front.
