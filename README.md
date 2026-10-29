@@ -4,6 +4,8 @@ A hands-on lab for running production inference on Kubernetes as a **composable 
 
 This repo stands up each layer on a local `kind` cluster, verifies it with real requests (not just `kubectl get pods`), and documents what actually works, what's a known gap, and what's documented-but-not-yet-verified.
 
+This lab isn't a live demo. It exists to back a talk's claims with verified proof points, and as a take-home resource for running the same verification yourself after the talk.
+
 ## Thesis
 
 Production inference on Kubernetes should be composed from open, swappable layers instead of rebuilt as a closed vertical for every model, accelerator, or team. A healthy architecture lets you change the serving engine without replacing the gateway, add accelerators without forking the platform, and attribute cost and latency through shared telemetry.
