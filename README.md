@@ -1,6 +1,6 @@
 # Composable Inference Lab
 
-A hands-on lab for running production inference on Kubernetes as a **composable stack of open, swappable layers** — gateway, schedule, serve, observe — instead of a single closed vertical.
+A hands-on lab for running production inference on Kubernetes as a **composable stack of open, swappable layers**: gateway, schedule, serve, observe, instead of a single closed vertical.
 
 This repo stands up each layer on a local `kind` cluster, verifies it with real requests (not just `kubectl get pods`), and documents what actually works, what's a known gap, and what's documented-but-not-yet-verified.
 
@@ -19,7 +19,7 @@ Accelerate   GPUs, TPUs, DPUs, DRA, device plugins, HAMi sharing
 Control      Kubernetes primitives
 ```
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full model, including a correction worth internalizing before you build anything on top of this: **"schedule" is not one layer**. It's four separate, cooperating control loops (the llm-d Endpoint Picker, Kueue, the Kubernetes scheduler + HAMi, and KubeRay) with different jobs. Conflating them is the single most common source of confused debugging in this space.
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full model, including a correction worth internalizing before you build anything on top of this: **"schedule" is not one layer**. It's four separate, cooperating control loops (the llm-d Endpoint Picker, Kueue, the Kubernetes scheduler + HAMi, and KubeRay) with different jobs. Treating them as one is the single most common source of confused debugging in this space.
 
 ## What's actually verified vs. documented
 
@@ -30,12 +30,12 @@ This lab distinguishes what was **run and confirmed end-to-end** from what's **d
 | Gateway | agentgateway + Gateway API Inference Extension | Istio, Envoy AI Gateway, Praxis |
 | Schedule | Kueue (admission/quota loop) | Volcano, KAI Scheduler, HAMi (needs GPU hardware) |
 | Serve | llm-d-inference-sim (GPU-free simulator) | KServe + vLLM, Ray Serve, SGLang, Triton |
-| Observe | OTel trace correlation across gateway → EPP | Serve-layer span emission (structural gap — see [Findings](docs/FINDINGS.md)) |
+| Observe | OTel trace correlation across gateway → EPP | Serve-layer span emission (structural gap, see [Gotchas](docs/GOTCHAS.md)) |
 
 ## Prerequisites
 
 - `kind`, `kubectl`, `helm`
-- A container runtime `kind` can use: Docker, or `podman` with `KIND_EXPERIMENTAL_PROVIDER=podman` (this lab was built and verified against podman — if your podman machine is stale or undersized, resize it first: `podman machine set --cpus 4 --memory 8192 --disk-size 40 <machine-name>`)
+- A container runtime `kind` can use: Docker, or `podman` with `KIND_EXPERIMENTAL_PROVIDER=podman` (this lab was built and verified against podman; if your podman machine is stale or undersized, resize it first: `podman machine set --cpus 4 --memory 8192 --disk-size 40 <machine-name>`)
 - No GPU required for the core path (gateway → schedule → serve → observe). A GPU is only needed for HAMi and for the KServe + real vLLM alternative serving path.
 
 ## Quickstart
@@ -55,7 +55,7 @@ make serve
 make observe
 ```
 
-See the `Makefile` and `scripts/` for what each target actually runs, and [`docs/GOTCHAS.md`](docs/GOTCHAS.md) for the gotchas you'll hit along the way — most of them are already fixed in these scripts, but a few (like the EPP reporting an error status on an otherwise-successful request) are open and worth knowing about before you demo this.
+See the `Makefile` and `scripts/` for what each target actually runs, and [`docs/GOTCHAS.md`](docs/GOTCHAS.md) for the gotchas you'll hit along the way. Most of them are already fixed in these scripts, but a few (like the EPP reporting an error status on an otherwise-successful request) are open and worth knowing about before you demo this.
 
 ## Layout
 
@@ -76,4 +76,4 @@ See the `Makefile` and `scripts/` for what each target actually runs, and [`docs
 
 ## License
 
-Apache 2.0 — see [LICENSE](LICENSE).
+Apache 2.0, see [LICENSE](LICENSE).

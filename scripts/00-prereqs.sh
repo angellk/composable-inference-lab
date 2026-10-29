@@ -20,7 +20,7 @@ elif command -v podman >/dev/null; then
       podman machine start "$MACHINE"
     fi
   else
-    echo "No podman machine found — creating one (4 CPU / 8GB RAM / 40GB disk)..."
+    echo "No podman machine found, creating one (4 CPU / 8GB RAM / 40GB disk)..."
     podman machine init --cpus 4 --memory 8192 --disk-size 40
     podman machine start
   fi

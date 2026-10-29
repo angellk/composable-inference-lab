@@ -12,14 +12,14 @@
 #
 # This script is a dependency-free fallback using curl, measuring basic
 # per-request latency under concurrency. It does not measure true TTFT or
-# inter-token latency for streaming responses — use AIPerf for that.
+# inter-token latency for streaming responses; use AIPerf for that.
 set -euo pipefail
 ENDPOINT="${ENDPOINT:-http://localhost:8080/v1/completions}"
 MODEL="${MODEL:-lab-dummy-model}"
 CONCURRENCY="${CONCURRENCY:-10}"
 REQUESTS="${REQUESTS:-100}"
 
-echo "Load testing ${ENDPOINT} — ${REQUESTS} requests at concurrency ${CONCURRENCY}"
+echo "Load testing ${ENDPOINT}: ${REQUESTS} requests at concurrency ${CONCURRENCY}"
 echo "(dependency-free curl fallback; use AIPerf for rigorous TTFT/inter-token-latency measurement)"
 echo ""
 

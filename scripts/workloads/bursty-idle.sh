@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Bursty, mostly-idle agent pattern: a long idle period, then a sudden
 # concurrent burst. Mirrors the "bursty, mostly-idle, stateful agent
-# workload" shape that motivates autoscaling (e.g. KEDA + EPP metrics) —
-# actually running an autoscaler is out of scope for this lab, but this
+# workload" shape that motivates autoscaling (e.g. KEDA + EPP metrics).
+# Actually running an autoscaler is out of scope for this lab, but this
 # traffic shape is useful for observing queue/latency behavior under it.
 set -euo pipefail
 ENDPOINT="${ENDPOINT:-http://localhost:8080/v1/completions}"
