@@ -7,7 +7,7 @@ kubeconfig.*
 *.kubeconfig
 .kube/
 
-# Secrets / credentials — never commit these
+# Secrets and credentials: never commit these
 *.pem
 *.key
 .env
