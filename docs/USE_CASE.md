@@ -24,15 +24,13 @@ Representative parameters for this pattern at a realistic (if modest) production
 - **Tenants**: on the order of 2-3 dozen internal teams sharing one gateway.
 - **Request mix**: a combination of chat generation, text generation, and embeddings calls, not a single uniform request type.
 - **Aggregate load**: tens of millions of requests per month in aggregate, with a peak in the tens of requests per second, well within what this lab's infrastructure should be able to sustain even on modest hardware.
-- **Per-tenant tagging**: every request carries an identifier so usage and cost can be attributed back to the originating team, exactly what `x-llm-d-inference-fairness-id` already does in [`scripts/workloads/multi-tenant.sh`](../scripts/workloads/multi-tenant.sh).
+- **Per-tenant tagging**: every request carries an identifier so usage and cost can be attributed back to the originating team, exactly what `x-llm-d-inference-fairness-id` already does in [`scripts/workloads/multi_tenant.py`](../scripts/workloads/multi_tenant.py).
 - **A security pre-processing step**: real deployments of this pattern run PII redaction (or an equivalent data-handling policy) before requests leave the gateway for an external backend. This lab doesn't implement that step, but it's worth keeping in mind as a layer that sits between Gateway and Serve in a real deployment.
 
 ## Running it
 
-`scripts/workloads/multi-tenant.sh` already implements the core shape (concurrent tenants, per-tenant header tagging). To approximate the request-mix and scale described above rather than the script's lab-practical defaults, run it with a higher tenant count and request volume tuned to your cluster's actual capacity:
+`scripts/workloads/multi_tenant.py` implements the core shape: concurrent tenants, per-tenant header tagging, and a genuine mix of chat generation, text generation, and embeddings requests per tenant, matching the request mix described above instead of one repeated request shape. To approximate the scale described above rather than the script's lab-practical defaults, run it with a higher tenant count and request volume tuned to your cluster's actual capacity:
 
 ```bash
-TENANTS=10 REQUESTS_PER_TENANT=50 ./scripts/workloads/multi-tenant.sh
+TENANTS=10 REQUESTS_PER_TENANT=50 python3 scripts/workloads/multi_tenant.py
 ```
-
-Extending the script to send a genuine mix of chat/text-generation/embeddings request bodies (rather than one request shape repeated) would make this a closer match to the real pattern, and is a reasonable next contribution to this lab.
