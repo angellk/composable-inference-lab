@@ -14,7 +14,7 @@ Production inference on Kubernetes should be composed from open, swappable layer
 
 ```
 Observe      OpenTelemetry (gen_ai.* spans), traces, latency, cost attribution
-Serve        llm-d-inference-sim, KServe + vLLM, Ray Serve, SGLang, Triton
+Serve        llm-d-inference-sim, KServe + vLLM, Ray Serve (via KubeRay, CNCF Sandbox), SGLang, Triton
 Gateway      Gateway API + Inference Extension, agentgateway, Istio, Envoy AI Gateway, Praxis
 Schedule     Kueue, Kubernetes scheduler + HAMi, KubeRay, llm-d Endpoint Picker (EPP)
 Accelerate   GPUs, TPUs, DPUs, DRA, device plugins, HAMi sharing
@@ -31,7 +31,7 @@ This lab distinguishes what was **run and confirmed end-to-end** from what's **d
 | :--- | :--- | :--- |
 | Gateway | agentgateway + Gateway API Inference Extension | Istio, Envoy AI Gateway, Praxis |
 | Schedule | Kueue (admission/quota loop) | Volcano, KAI Scheduler, HAMi (needs GPU hardware) |
-| Serve | llm-d-inference-sim (GPU-free simulator) | KServe + vLLM, Ray Serve, SGLang, Triton |
+| Serve | llm-d-inference-sim (GPU-free simulator) | KServe + vLLM, Ray Serve (via KubeRay, CNCF Sandbox), SGLang, Triton |
 | Observe | OTel trace correlation across gateway → EPP | Serve-layer span emission (structural gap, see [Gotchas](docs/FINDINGS.md)) |
 
 ## Prerequisites

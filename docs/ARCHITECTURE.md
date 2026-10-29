@@ -4,7 +4,7 @@
 
 ```
 Observe      OpenTelemetry (gen_ai.* spans), traces, latency, cost attribution
-Serve        llm-d-inference-sim, KServe + vLLM, Ray Serve, SGLang, Triton
+Serve        llm-d-inference-sim, KServe + vLLM, Ray Serve (via KubeRay, CNCF Sandbox), SGLang, Triton
 Gateway      Gateway API + Inference Extension, agentgateway, Istio, Envoy AI Gateway, Praxis
 Schedule     Kueue, Kubernetes scheduler + HAMi, KubeRay, llm-d Endpoint Picker (EPP)
 Accelerate   GPUs, TPUs, DPUs, DRA, device plugins, HAMi sharing
