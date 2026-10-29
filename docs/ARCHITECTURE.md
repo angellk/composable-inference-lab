@@ -28,6 +28,8 @@ The gateway talks to the EPP for request routing. The EPP gets its signals from 
 
 This lab proved that independence directly: the Kueue `ClusterQueue` in this repo was never touched by the end-to-end request test, and that's correct: request routing and resource admission are genuinely separate concerns.
 
+The EPP role itself is also a standard interface, not something llm-d uniquely provides. The Gateway API Inference Extension project ships its own reference implementation (LWEPP) that speaks the same `ext_proc` contract against the same `InferencePool`. This lab swapped llm-d's EPP for LWEPP on a live pool with no other changes (same gateway, same pool, same backend pods) and a real request still succeeded; see `ALTERNATIVES.md`'s EPP implementations section for the details. llm-d's EPP does cache-aware and saturation-aware scoring; LWEPP does plain round-robin. The point isn't that they're interchangeable in capability, it's that the interface between gateway and EPP is open enough that a different implementation can sit behind it at all.
+
 ## How the gateway actually talks to the EPP
 
 The gateway sends request headers/body to the EPP via gRPC `ext_proc` (Envoy's external processing protocol); the EPP evaluates candidate endpoints and returns the chosen address. This is a routing decision over already-running pods, not a Kubernetes scheduler call and not a Kueue interaction.

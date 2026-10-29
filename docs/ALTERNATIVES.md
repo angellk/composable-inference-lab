@@ -14,6 +14,15 @@ The full core path (Gateway, Schedule, Serve, Observe) has been verified under b
 | **Envoy AI Gateway** | VERIFIED | Also known as Agent Router. Open source (Apache-2.0), but no longer CNCF: it left the CNCF/Envoy sub-project structure in September 2026 and is now hosted by the Agentic AI Foundation, a separate Linux Foundation project. Installed as Envoy Gateway plus its CRDs/controller, running as a third gateway alongside agentgateway and Istio, all routing to the same `InferencePool` simultaneously; real request returned a successful completion. On a plain `kind` cluster the `Gateway` resource never reaches `Programmed=True` (its Service is `type: LoadBalancer` and kind has no LoadBalancer provisioner), even though the `HTTPRoute`, Listener, and actual routing all work; use `Accepted`/`ResolvedRefs` plus a real request as the bring-up check instead. |
 | Praxis | CHECKED, NOT CURRENTLY VIABLE | Its operator supports `GatewayClass`/`Gateway`/`HTTPRoute`/`ReferenceGrant` only; its own docs list `ExtensionRef` filters as "logged and dropped," with no `InferencePool`/EPP/`ext-proc` support in either the operator or its separate `ai` repo. A real, relevant CNCF project for the gateway layer generally, just not a tested fit for this specific Inference Extension pattern yet. |
 
+### Endpoint Picker (EPP) implementations
+
+The Endpoint Picker is a standard interface (the `ext_proc` contract plus the `InferencePool.spec.endpointPickerRef`), not something llm-d uniquely provides. There's more than one real implementation.
+
+| Project | Status | Notes |
+| :--- | :--- | :--- |
+| **llm-d Endpoint Picker (EPP)** | VERIFIED | Cache-aware and saturation-aware request placement, proven via the end-to-end serve test. The capable, feature-rich implementation. |
+| **LWEPP (Lightweight Endpoint Picker)** | VERIFIED | The Gateway API Inference Extension project's own reference EPP (`kubernetes-sigs/gateway-api-inference-extension/pkg/lwepp` and `cmd/lwepp`, published image at `us-central1-docker.pkg.dev/k8s-staging-images/gateway-api-inference-extension/lwepp:main`), built primarily for the project's own conformance tests but deployable as an ordinary Deployment plus Service like any other EPP. Swapped in for llm-d's EPP on a live `InferencePool` with no other changes; the pool stayed `Accepted=True`/`ResolvedRefs=True` and a real request succeeded through it. Does simple round-robin, not cache-aware scoring; the swap proves the interface is open, not that LWEPP is a feature-equivalent replacement. |
+
 ## Schedule
 
 The four control loops (see `ARCHITECTURE.md`) should be proved **independently**, not stacked blind. There's no single validated end-to-end compatibility matrix across all of them.
